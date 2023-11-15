@@ -172,7 +172,7 @@ jobs:
         id: cpr
         uses: peter-evans/create-pull-request@v5
         with:
-          branch: main
+          branch: feature/test
           committer: rhoribe <rhoribe1908@gmail.com>
           author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
           signoff: false
