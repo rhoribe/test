@@ -67,6 +67,10 @@ jobs:
       - name: Terraform Apply
         if: ${{ env.TF_DESTROY == 'FALSE' || env.TF_DESTROY == 'false'  }}
         run: terraform apply -auto-approve -input=false
+
+      - name: Terraform Destroy
+        if: ${{ env.TF_DESTROY == 'TRUE' || env.TF_DESTROY == 'true'  }}
+        run: terraform destroy -auto-approve -input=false
      
 
 
