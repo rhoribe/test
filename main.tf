@@ -7,6 +7,16 @@ resource "aws_s3_bucket" "example" {
   }
 }
 
+resource "aws_s3_bucket" "example1" {
+  bucket = "rhoribe-test-bucket1"
+
+  tags = {
+    Name        = "rhoribe-test-bucket1"
+    Environment = "Dev"
+  }
+}
+
+
 terraform {
   backend "s3" {
     bucket         = var.bucket
