@@ -70,15 +70,18 @@ jobs:
       - name: Terraform Plan 
         if: ${{ env.TF_DESTROY == 'FALSE' || env.TF_DESTROY == 'false'  }}
         id: plan
-        run: terraform plan 
+        run: terraform plan  -out tfplan.binary
         continue-on-error: false
 
       - name: Terraform Plan -destroy
         if: ${{ env.TF_DESTROY == 'TRUE' || env.TF_DESTROY == 'true'  }}
         id: plan-destroy
-        run: terraform plan -destroy 
+        run: terraform plan -destroy -out tfplan.binary
         continue-on-error: false
 
+      - name: Terraform Show
+        id: show
+        run: terraform show -json  tfplan.binary > plan.json
       - name: Setup Infracost
         uses: infracost/actions/setup@v2
         with:
@@ -91,9 +94,7 @@ jobs:
 
       - name: Generate Infracost cost estimate baseline
         run: |
-          infracost breakdown --path=${{ github.workspace }} \
-          --format=json \
-          --out-file=/tmp/infracost-base.json
+          infracost breakdown --path=plan.json --out-file=/tmp/infracost-base.json
     
       - name: Generate Infracost diff
         run: |
