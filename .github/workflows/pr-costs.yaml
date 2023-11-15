@@ -81,7 +81,7 @@ jobs:
       - name: Post Infracost comment
         run: |
             infracost comment github --path=/tmp/infracost.json \
-                                     --repo=test \
+                                     --repo=rhoribe/test \
                                      --github-token=${{secrets.GIT_TOKEN}} \
                                      --pull-request=${{github.event.pull_request.number}} \
                                      --behavior=update
