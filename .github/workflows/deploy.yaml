@@ -59,7 +59,7 @@ jobs:
         id: validate
         run: terraform validate -no-color
 
-      - name: Terraform Plan
+      - name: Terraform Plan 
         if: ${{ env.TF_DESTROY == 'FALSE' || env.TF_DESTROY == 'false'  }}
         id: plan
         run: terraform plan -no-color
@@ -69,7 +69,7 @@ jobs:
         if: ${{ env.TF_DESTROY == 'FALSE' || env.TF_DESTROY == 'false'  }}
         run: terraform apply -auto-approve -input=false
 
-      - name: Terraform Plan
+      - name: Terraform Plan -destroy
         if: ${{ env.TF_DESTROY == 'TRUE' || env.TF_DESTROY == 'true'  }}
         id: plan
         run: terraform plan -destroy -no-color
