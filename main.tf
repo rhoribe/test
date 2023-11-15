@@ -7,9 +7,3 @@ resource "aws_s3_bucket" "example" {
   }
 }
 
-terraform {
-  backend "s3" {
-    encrypt = true
-    key = "test"
-  }
-}
