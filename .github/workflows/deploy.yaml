@@ -34,7 +34,6 @@ jobs:
           terraform_version: "~> 1.6"
 
       - name: Create backend file
-
         run: |
           cat << 'EOF' > ${{ github.workspace }}/backend.tf
           terraform { 
@@ -45,6 +44,12 @@ jobs:
             } 
           } 
           EOF
+        shell: bash
+
+      - name: check  backend file
+        run: |
+          ls ${{ github.workspace }}/backend.tf
+          cat ${{ github.workspace }}/backend.tf
         shell: bash
 
       - name: Terraform fmt
