@@ -36,14 +36,14 @@ jobs:
       - name: Create backend file
 
         run: |
-          echo " 
+          cat << EOF > ${{ github.workspace }}/backend.tf
           terraform { 
             backend "s3" { 
               bucket =  ${BUCKET_TF_STATE} 
               key    =  ${BUCKET_TF_KEY} 
               region = ${AWS_REGION} 
             } 
-          }  " > ${{ github.workspace }}/backend.tf
+          }  EOF
           ls ${{ github.workspace }}
         shell: bash
 
