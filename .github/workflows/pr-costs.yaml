@@ -94,4 +94,18 @@ jobs:
           infracost breakdown --path=${{ github.workspace }} \
           --format=json \
           --out-file=/tmp/infracost-base.json
-      
+    
+      - name: Generate Infracost diff
+        run: |
+          infracost diff --path=${TF_ROOT} \
+                              --format=json \
+                              --compare-to=/tmp/infracost-base.json \
+                              --out-file=/tmp/infracost.json      
+                              
+      - name: Post Infracost comment
+        run: |
+          infracost comment github --path=/tmp/infracost.json \
+                                   --repo=${{ github.repository }} \
+                                   --github-token=${{secrets.GIT_TOKEN}} \
+                                   --pull-request=${{github.event.pull_request.number}} \
+                                   --behavior=update
