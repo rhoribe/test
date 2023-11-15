@@ -37,7 +37,7 @@ jobs:
         run: |
           cat << 'EOF' > ${{ github.workspace }}/backend.tfvars
             bucket =  "${{ env.BUCKET_TF_STATE }}"
-            key    =  "/test/${{ env.BUCKET_TF_STATE }}"
+            key    =  "test/${{ env.BUCKET_TF_STATE }}"
             region =  "${{ env.AWS_REGION }}" 
           EOF
         shell: bash
