@@ -31,7 +31,7 @@ jobs:
 
     env:
       TF_ROOT: ${{ github.workspace }}
-
+ 
     steps:
     
       - name: Configure  AWS  Credentials
@@ -41,34 +41,70 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ vars.AWS_REGION }}
 
+      - uses: actions/checkout@v3
+      
+      - uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: "~> 1.6"
+
+      - name: Create backend  tfvars
+        run: |
+          cat << 'EOF' > ${{ github.workspace }}/backend.tfvars
+            bucket =  "${{ env.BUCKET_TF_STATE }}"
+            key    =  "test/${{ env.BUCKET_TF_KEY }}.tfstate"
+            region =  "${{ env.AWS_REGION }}" 
+          EOF
+        shell: bash
+
+      - name: Configure  AWS  Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ vars.AWS_REGION }}
+
+      - name: Terraform Init
+        id: init
+        run: terraform init  -backend-config="${{ github.workspace }}/backend.tfvars"
+
+      - name: Terraform Plan 
+        if: ${{ env.TF_DESTROY == 'FALSE' || env.TF_DESTROY == 'false'  }}
+        id: plan
+        run: terraform plan -out plan.tfplan
+        continue-on-error: false
+
+      - name: Terraform Plan -destroy
+        if: ${{ env.TF_DESTROY == 'TRUE' || env.TF_DESTROY == 'true'  }}
+        id: plan-destroy
+        run: terraform plan -destroy  -out plan.tfplan
+        continue-on-error: false
+
+     # Generates show for Terraform
+      - name: Terraform Show
+        id: show
+        run: terraform show -json plan.tfplan
+
+      - name: "Save Plan JSON"
+        run: echo '${{ steps.show.outputs.stdout }}' > plan.json # Do not change
+
       - name: Setup Infracost
         uses: infracost/actions/setup@v2
         with:
           api-key: ${{ secrets.INFRACOST_API_KEY }}
 
-      # Checkout the base branch of the pull request (e.g. main/master).
-      - name: Checkout base branch
-        uses: actions/checkout@v3
-        with:
-          ref: '${{ github.event.pull_request.base.ref }}'
-
       # Generate Infracost JSON file as the baseline.
       - name: Generate Infracost cost estimate baseline
         run: |
-          infracost breakdown --path=${TF_ROOT} \
+          infracost breakdown --path=plan.json \
                               --format=json \
                               --out-file=/tmp/infracost-base.json
-
-      # Checkout the current PR branch so we can create a diff.
-      - name: Checkout PR branch
-        uses: actions/checkout@v3
 
       # Generate an Infracost diff and save it to a JSON file.
       - name: Generate Infracost diff
         run: |
-          infracost diff --path=${TF_ROOT} \
+          infracost diff --path=. \
                           --format=json \
-                          --compare-to=/tmp/infracost-base.json \
+                          --compare-to=plan.json \
                           --out-file=/tmp/infracost.json
 
       # Posts a comment to the PR using the 'update' behavior.
