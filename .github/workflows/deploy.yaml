@@ -20,6 +20,7 @@ env:
  AWS_REGION: ${{ secrets.AWS_REGION }}
  # S3 bucket for the Terraform state
  BUCKET_TF_STATE: ${{ secrets.BUCKET_TF_STATE}}
+ key: ${{ vars.KEY }}
 
 jobs:
   terraform:
