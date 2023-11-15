@@ -182,13 +182,13 @@ jobs:
     steps:
 
       - uses: actions/checkout@v3
-      
+
       - name: Create pull request
         id: open-pr
         uses: repo-sync/pull-request@v2
         with:
           destination_branch: "main"
           pr_title: "feat: PLACEHOLDER TITLE"
-          pr_template: ".github/PULL_REQUEST_TEMPLATE.md"
-          pr_reviewer: "paigen11"
+          # pr_template: ".github/PULL_REQUEST_TEMPLATE.md"
+          # pr_reviewer: "paigen11"
           pr_draft: true
