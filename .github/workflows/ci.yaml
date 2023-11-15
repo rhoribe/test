@@ -72,12 +72,12 @@ jobs:
 
   terrascan:
     name: terrascan
-        runs-on: ubuntu-latest
+    runs-on: ubuntu-latest
 
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
-      
+
     - name: Run Terrascan
       id: terrascan
       uses: tenable/terrascan-action@main
