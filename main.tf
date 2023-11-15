@@ -7,14 +7,7 @@ resource "aws_s3_bucket" "example" {
   }
 }
 
-# resource "aws_vpc" "main" {
-#   cidr_block       = "10.0.0.0/16"
-#   instance_tenancy = "default"
 
-#   tags = {
-#     Name = "main"
-#   }
-# }
 
 terraform {
   backend "s3" {
@@ -24,5 +17,3 @@ terraform {
     encrypt        = true
   }
 }
-
-

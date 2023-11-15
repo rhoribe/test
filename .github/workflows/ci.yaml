@@ -59,7 +59,19 @@ jobs:
       - name: Terraform Validate
         id: validate
         run: terraform validate -no-color
-        
+
+      - name: Terraform Plan 
+        if: ${{ env.TF_DESTROY == 'FALSE' || env.TF_DESTROY == 'false'  }}
+        id: plan
+        run: terraform plan  
+        continue-on-error: false
+
+      - name: Terraform Plan -destroy
+        if: ${{ env.TF_DESTROY == 'TRUE' || env.TF_DESTROY == 'true'  }}
+        id: plan-destroy
+        run: terraform plan -destroy 
+        continue-on-error: false
+
   tflint:
     name: tflint
     runs-on: ubuntu-latest
@@ -92,7 +104,7 @@ jobs:
   tfsec:
     name: tfsec
     runs-on: ubuntu-latest
-    needs: [terraform-ci]
+    needs: terraform-ci
 
     steps:
       - name: Clone repo
@@ -104,6 +116,7 @@ jobs:
   terrascan:
     name: terrascan
     runs-on: ubuntu-latest
+    needs: terraform-ci
 
     steps:
     - name: Checkout repository
@@ -132,6 +145,7 @@ jobs:
   checkov:
     name: checkov
     runs-on: ubuntu-latest
+    needs: terraform-ci
 
     steps:
       - name: Checkout repo
@@ -161,4 +175,23 @@ jobs:
           # baseline: cloudformation/.checkov.baseline # optional: Path to a generated baseline file. Will only report results not in the baseline.
           # container_user: 1000 # optional: Define what UID and / or what GID to run the container under to prevent permission issues
           # use_enforcement_rules: true # optional - use enforcement rule configs from the platform
+
+  open-pr:
+    name: open-pr
+    runs-on: ubuntu-latest
+    needs: [terraform-ci,terrascan,checkov]  
+    steps:
+
+      - uses: actions/checkout@v3
+
+      - name: Create pull request
+        id: open-pr
+        uses: repo-sync/pull-request@v2
+        with:
+          destination_branch: "main"
+          pr_title: "AUTOMATIC PR: FEATURE -> MAIN"
+          # pr_template: ".github/PULL_REQUEST_TEMPLATE.md"
+          # pr_reviewer: "paigen11"
+          pr_draft: false
+
 
