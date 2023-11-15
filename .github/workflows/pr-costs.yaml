@@ -79,18 +79,19 @@ jobs:
         run: terraform plan -destroy  -out plan.tfplan
         continue-on-error: false
 
-     # Generates show for Terraform
-      - name: Terraform Show
-        id: show
-        run: terraform show -json plan.tfplan
-
-      - name: "Save Plan JSON"
-        run: echo '${{ steps.show.outputs.stdout }}' > plan.json # Do not change
-
-      - name: Run infracost diff
-        uses: infracost/infracost-gh-action@master # Use a specific version instead of master if locking is preferred
-        env:
-          INFRACOST_API_KEY: ${{ secrets.INFRACOST_API_KEY }}
-          GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
+      - name: Setup Infracost
+        uses: infracost/actions/setup@v2
         with:
-          path: plan.json # Do not change as this file is generated above
+          api-key: ${{ secrets.INFRACOST_API_KEY }}
+
+      - name: Checkout base branch
+        uses: actions/checkout@v2
+        with:
+          ref: '${{ github.event.pull_request.base.ref }}'
+
+      - name: Generate Infracost cost estimate baseline
+        run: |
+          infracost breakdown --path=${{ github.workspace }} \
+          --format=json \
+          --out-file=/tmp/infracost-base.json
+      
