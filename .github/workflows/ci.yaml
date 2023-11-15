@@ -7,9 +7,9 @@ permissions:
 name: "CI Infrastructure"
 
 on:
-  pull_request:
+  push:
     branches:
-      - main
+      - feature/**
 
 env:
  # verbosity setting for Terraform logs
