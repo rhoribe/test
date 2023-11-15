@@ -87,35 +87,10 @@ jobs:
       - name: "Save Plan JSON"
         run: echo '${{ steps.show.outputs.stdout }}' > plan.json # Do not change
 
-      - name: Setup Infracost
-        uses: infracost/actions/setup@v2
+      - name: Run infracost diff
+        uses: infracost/infracost-gh-action@master # Use a specific version instead of master if locking is preferred
+        env:
+          INFRACOST_API_KEY: ${{ secrets.INFRACOST_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
         with:
-          api-key: ${{ secrets.INFRACOST_API_KEY }}
-
-      # Generate Infracost JSON file as the baseline.
-      - name: Generate Infracost cost estimate baseline
-        run: |
-          infracost breakdown --path=plan.json \
-                              --out-file=/tmp/infracost-base.json
-
-      # Generate an Infracost diff and save it to a JSON file.
-      - name: Generate Infracost diff
-        run: |
-          infracost diff --path=. \
-                          --compare-to=plan.json \
-                          --out-file=/tmp/infracost.json
-
-      # Posts a comment to the PR using the 'update' behavior.
-      # This creates a single comment and updates it. The "quietest" option.
-      # The other valid behaviors are:
-      #   delete-and-new - Delete previous comments and create a new one.
-      #   hide-and-new - Minimize previous comments and create a new one.
-      #   new - Create a new cost estimate comment on every push.
-      # See https://www.infracost.io/docs/features/cli_commands/#comment-on-pull-requests for other options.
-      - name: Post Infracost comment
-        run: |
-            infracost comment github --path=/tmp/infracost.json \
-                                     --repo=rhoribe/test \
-                                     --github-token=${{secrets.GIT_TOKEN}} \
-                                     --pull-request=${{github.event.pull_request.number}} \
-                                     --behavior=update
+          path: plan.json # Do not change as this file is generated above
