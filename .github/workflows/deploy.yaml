@@ -14,10 +14,7 @@ on:
 env:
  # verbosity setting for Terraform logs
  TF_LOG: ${{ vars.TF_LOG}}
- # Credentials for deployment to AWS
-#  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-#  AWS_REGION: ${{ vars.AWS_REGION }}
+ AWS_REGION: ${{ vars.AWS_REGION }}
  # S3 bucket for the Terraform state
  BUCKET_TF_STATE: ${{ vars.BUCKET_TF_STATE}}
  BUCKET_TF_KEY: ${{ vars.BUCKET_TF_KEY}}
@@ -42,8 +39,8 @@ jobs:
           EOF
         shell: bash
 
-      - name: Configurar Credenciais AWS
-        uses: aws-actions/configure-aws-credentials@v1
+      - name: Configure  AWS  Credentials
+        uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
