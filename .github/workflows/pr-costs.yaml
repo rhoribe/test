@@ -10,10 +10,6 @@ on:
   pull_request:
     branches:
       - main
-  workflow_run:
-    workflows: ["tflint"]
-    types:
-      - completed
 
 env:
  TF_LOG: ${{ vars.TF_LOG}}
