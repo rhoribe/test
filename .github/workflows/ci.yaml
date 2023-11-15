@@ -179,6 +179,7 @@ jobs:
   open-pr:
     name: open-pr
     runs-on: ubuntu-latest
+    needs: [terraform-ci,terrascan,checkov]  
     steps:
 
       - uses: actions/checkout@v3
