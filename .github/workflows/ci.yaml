@@ -173,3 +173,6 @@ jobs:
         uses: peter-evans/create-pull-request@v5
         with:
           branch: main
+          committer: GitHub <noreply@github.com>
+          author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
+          signoff: false
