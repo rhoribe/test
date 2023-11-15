@@ -70,13 +70,13 @@ jobs:
       - name: Terraform Plan 
         if: ${{ env.TF_DESTROY == 'FALSE' || env.TF_DESTROY == 'false'  }}
         id: plan
-        run: terraform plan -out plan.tfplan
+        run: terraform plan 
         continue-on-error: false
 
       - name: Terraform Plan -destroy
         if: ${{ env.TF_DESTROY == 'TRUE' || env.TF_DESTROY == 'true'  }}
         id: plan-destroy
-        run: terraform plan -destroy  -out plan.tfplan
+        run: terraform plan -destroy 
         continue-on-error: false
 
       - name: Setup Infracost
@@ -101,7 +101,7 @@ jobs:
                               --format=json \
                               --compare-to=/tmp/infracost-base.json \
                               --out-file=/tmp/infracost.json      
-                              
+
       - name: Post Infracost comment
         run: |
           infracost comment github --path=/tmp/infracost.json \
