@@ -10,6 +10,10 @@ on:
   pull_request:
     branches:
       - main
+  workflow_run:
+    workflows: ["CI Infrastructure"]
+    types:
+      - completed
 
 env:
  TF_LOG: ${{ vars.TF_LOG}}
