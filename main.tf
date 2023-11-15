@@ -9,8 +9,9 @@ resource "aws_s3_bucket" "example" {
 
 terraform {
   backend "s3" {
-    bucket = "mybucket"
-    key    = "path/to/my/key"
-    region = "us-east-1"
+    bucket         = var.bucket
+    key            = var.key
+    region         = var.region
+    encrypt        = true
   }
 }

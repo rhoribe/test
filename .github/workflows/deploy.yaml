@@ -33,6 +33,16 @@ jobs:
         with:
           terraform_version: "~> 1.6"
 
+      - name: Create backend file
+        run: |
+          cat << 'EOF' > ${{ github.workspace }}/backend.tfvars
+            bucket =  "${{ env.BUCKET_TF_STATE }}"
+            key    =  "/test/${{ env.BUCKET_TF_STATE }}"
+            region =  "${{ env.AWS_REGION }}" 
+          EOF
+        shell: bash
+
+
       - name: Terraform fmt
         id: fmt
         run: terraform fmt 
@@ -40,7 +50,7 @@ jobs:
 
       - name: Terraform Init
         id: init
-        run: terraform init  -backend-config="type=s3"  -backend-config="bucket=${{ env.BUCKET_TF_STATE }}"   -backend-config="key=${{ env.BUCKET_TF_STATE }}"   -backend-config="region=${{ env.AWS_REGION }}"
+        run: terraform init  -backend-config="${{ github.workspace }}/backend.tfvars"
 
       - name: Terraform Validate
         id: validate
