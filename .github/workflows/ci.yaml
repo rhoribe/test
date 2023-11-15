@@ -66,9 +66,9 @@ jobs:
           commit-message: Cloud - Update available list
           title: Cloud - Update available list
           body: Cloud - Update available list
-          base: main
+          base: feature/test
           labels: automated-pr, Clouds & Regions
-          branch: feature/test
+          branch: main
           token : ${{ secrets.GIT_TOKEN}}
 
   tflint:
