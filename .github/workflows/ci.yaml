@@ -4,10 +4,10 @@ defaults:
 permissions:
   pull-requests: write
 
-name: "Deploy Infrastructure"
+name: "CI Infrastructure"
 
 on:
-  push:
+  pull_request:
     branches:
       - main
 
