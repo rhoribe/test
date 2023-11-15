@@ -71,7 +71,7 @@ jobs:
 
       - name: Terraform Plan -destroy
         if: ${{ env.TF_DESTROY == 'TRUE' || env.TF_DESTROY == 'true'  }}
-        id: plan
+        id: plan-destroy
         run: terraform plan -destroy -no-color
         continue-on-error: false
 
