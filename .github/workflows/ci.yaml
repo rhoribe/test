@@ -69,6 +69,7 @@ jobs:
           base: main
           labels: automated-pr, Clouds & Regions
           branch: feature/test
+          token : ${{ secrets.GIT_TOKEN}}
 
   tflint:
     name: tflint
