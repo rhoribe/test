@@ -39,9 +39,9 @@ jobs:
           cat << 'EOF' > ${{ github.workspace }}/backend.tf
           terraform { 
             backend "s3" { 
-              bucket =  ${BUCKET_TF_STATE}
-              key    =  ${BUCKET_TF_KEY}
-              region = ${AWS_REGION} 
+              bucket =  ${{ env.BUCKET_TF_STATE }}
+              key    =  ${{ env.BUCKET_TF_KEY }}
+              region = ${{ env.AWS_REGION }} 
             } 
           } 
           EOF
