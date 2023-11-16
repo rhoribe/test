@@ -3,7 +3,6 @@ name: "Costs Infrastructure"
 
 on:
   workflow_call:
-  workflow_dispatch:
     inputs:
       PR:
         required: true
