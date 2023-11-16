@@ -6,7 +6,10 @@ permissions:
 
 name: "Costs Infrastructure"
 
-on: [pull_request]
+on:
+  pull_request:
+    branches:
+      - main
 
 env:
  TF_LOG: ${{ vars.TF_LOG}}
@@ -102,5 +105,3 @@ jobs:
                                    --github-token=${{secrets.GIT_TOKEN}} \
                                    --pull-request=${{github.event.pull_request.number}} \
                                    --behavior=update
-
-
