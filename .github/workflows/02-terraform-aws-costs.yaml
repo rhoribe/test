@@ -3,6 +3,11 @@ name: "Costs Infrastructure"
 
 on:
   workflow_call:
+  workflow_dispatch:
+    inputs:
+      PR:
+        required: true
+        type: number
 
 env:
  TF_LOG: ${{ vars.TF_LOG}}
@@ -96,6 +101,5 @@ jobs:
           infracost comment github --path=/tmp/infracost.json \
                                    --repo=${{ github.repository }} \
                                    --github-token=${{secrets.GIT_TOKEN}} \
-                                   --pull-request=${{github.event.pull_request.number}} \
-                                   --behavior=update\
-                                   --pull-request=1
+                                   --pull-request=${{inputs.PR}} \
+                                   --behavior=update
