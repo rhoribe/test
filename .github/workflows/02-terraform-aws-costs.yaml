@@ -98,3 +98,4 @@ jobs:
                                    --github-token=${{secrets.GIT_TOKEN}} \
                                    --pull-request=${{github.event.pull_request.number}} \
                                    --behavior=update
+                                   --commit ${{ github.head_ref }}.${{ github.sha }}
