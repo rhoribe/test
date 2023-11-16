@@ -6,10 +6,7 @@ permissions:
 
 name: "Costs Infrastructure"
 
-on:
-  pull_request:
-    branches:
-      - main
+on: [pull_request]
 
 env:
  TF_LOG: ${{ vars.TF_LOG}}
