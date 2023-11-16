@@ -1,7 +1,5 @@
 name: "Costs Infrastructure"
 
-permissions:
-  pull-requests: write
 
 on:
   workflow_call:
@@ -99,4 +97,5 @@ jobs:
                                    --repo=${{ github.repository }} \
                                    --github-token=${{secrets.GIT_TOKEN}} \
                                    --pull-request=${{github.event.pull_request.number}} \
-                                   --behavior=update
+                                   --behavior=update \
+                                   --commit=infracost
