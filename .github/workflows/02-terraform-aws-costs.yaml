@@ -1,15 +1,6 @@
-defaults:
-  run:
-    working-directory: .
-permissions:
-  pull-requests: write
-
 name: "Costs Infrastructure"
-
 on:
-  pull_request:
-    branches:
-      - main
+  workflow_call:
 
 env:
  TF_LOG: ${{ vars.TF_LOG}}

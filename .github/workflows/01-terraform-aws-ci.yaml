@@ -1,16 +1,8 @@
-defaults:
-  run:
-    working-directory: .
-permissions:
-  pull-requests: write
-
-name: "CI Infrastructure"
+name: "CI - Terraform  Infrastructure"
 
 on:
-  push:
-    branches:
-      - feature/**
-
+  workflow_call:
+  
 env:
  # verbosity setting for Terraform logs
  TF_LOG: ${{ vars.TF_LOG}}
@@ -177,22 +169,3 @@ jobs:
           # baseline: cloudformation/.checkov.baseline # optional: Path to a generated baseline file. Will only report results not in the baseline.
           # container_user: 1000 # optional: Define what UID and / or what GID to run the container under to prevent permission issues
           # use_enforcement_rules: true # optional - use enforcement rule configs from the platform
-
-  open-pr:
-    name: open-pr
-    runs-on: ubuntu-latest
-    steps:
-
-      - uses: actions/checkout@v3
-
-      - name: Create pull request
-        id: open-pr
-        uses: repo-sync/pull-request@v2
-        with:
-          destination_branch: "main"
-          pr_title: "AUTOMATIC PR: FEATURE -> MAIN"
-          # pr_template: ".github/PULL_REQUEST_TEMPLATE.md"
-          # pr_reviewer: "paigen11"
-          pr_draft: false
-
-
