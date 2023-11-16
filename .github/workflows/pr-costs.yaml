@@ -10,10 +10,6 @@ on:
   pull_request:
     branches:
       - main
-  workflow_run:
-    workflows: ["tflint"]
-    types:
-      - completed
 
 env:
  TF_LOG: ${{ vars.TF_LOG}}
@@ -109,4 +105,5 @@ jobs:
                                    --github-token=${{secrets.GIT_TOKEN}} \
                                    --pull-request=${{github.event.pull_request.number}} \
                                    --behavior=update
+
 
