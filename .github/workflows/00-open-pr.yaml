@@ -8,6 +8,8 @@ jobs:
   open-pr:
     name: open-pr
     runs-on: ubuntu-latest
+    outputs:
+      pr_number: ${{ steps.open-pr.outputs.pr_number }}
     steps:
 
       - uses: actions/checkout@v3
