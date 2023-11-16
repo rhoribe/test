@@ -1,16 +1,7 @@
-defaults:
-  run:
-    working-directory: .
-permissions:
-  pull-requests: write
-
-name: "Deploy Infrastructure"
-
+name: "Terraform - Deploy Infrastructure"
 on:
-  push:
-    branches:
-      - main
-
+  workflow_call:
+  
 env:
  TF_LOG: ${{ vars.TF_LOG}}
  AWS_REGION: ${{ vars.AWS_REGION }}
